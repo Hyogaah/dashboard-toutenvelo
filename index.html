@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToutenVélo Rouen — Dashboard Planning S2→S12 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; }
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 32px 40px; border-bottom: 3px solid #38bdf8; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #38bdf8; }
+  .header p { color: #94a3b8; margin-top: 6px; font-size: 14px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 24px 40px; }
+  .kpi { background: #1e293b; border-radius: 12px; padding: 20px; border-left: 4px solid #38bdf8; }
+  .kpi .value { font-size: 32px; font-weight: 800; color: #38bdf8; }
+  .kpi .label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .kpi.green { border-left-color: #4ade80; } .kpi.green .value { color: #4ade80; }
+  .kpi.orange { border-left-color: #fb923c; } .kpi.orange .value { color: #fb923c; }
+  .kpi.purple { border-left-color: #a78bfa; } .kpi.purple .value { color: #a78bfa; }
+  .kpi.red { border-left-color: #f87171; } .kpi.red .value { color: #f87171; }
+  .charts { padding: 16px 40px 40px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .chart-card { background: #1e293b; border-radius: 12px; padding: 24px; }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-card h3 { font-size: 16px; color: #f1f5f9; margin-bottom: 16px; font-weight: 600; }
+  .chart-container { position: relative; width: 100%; }
+  .chart-container.tall { height: 400px; } .chart-container.medium { height: 320px; }
+  .insight { background: #1e293b; border-radius: 12px; padding: 20px; border-left: 4px solid #fbbf24; margin: 0 40px 24px; }
+  .insight h3 { color: #fbbf24; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .insight ul { list-style: none; padding: 0; }
+  .insight li { padding: 6px 0; font-size: 14px; color: #cbd5e1; border-bottom: 1px solid #334155; }
+  .insight li:last-child { border: none; }
+  .insight li span.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .tag.pos { background: #166534; color: #4ade80; } .tag.neg { background: #7f1d1d; color: #f87171; } .tag.neutral { background: #1e3a5f; color: #38bdf8; }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>ToutenVélo Rouen — Planning S2 → S12 (2026)</h1>
+  <p>Dashboard analytique • 15 employés • 11 semaines • 1 033 créneaux réalisés</p>
+</div>
+<div class="kpi-row">
+  <div class="kpi"><div class="value">1 033</div><div class="label">Créneaux réalisés</div></div>
+  <div class="kpi green"><div class="value">15</div><div class="label">Employés</div></div>
+  <div class="kpi orange"><div class="value">18</div><div class="label">Missions différentes</div></div>
+  <div class="kpi purple"><div class="value">94</div><div class="label">Moy. créneaux / sem.</div></div>
+  <div class="kpi red"><div class="value">-3,5 min</div><div class="label">Écart horaire moyen</div></div>
+</div>
+<div class="insight">
+  <h3>Points clés</h3>
+  <ul>
+    <li><span class="tag neutral">TOP</span> <strong>Fonction support</strong> = 21% des créneaux, la mission dominante</li>
+    <li><span class="tag pos">RÉGULIER</span> Charge stable entre 89 et 113 créneaux/semaine — pas de pic anormal</li>
+    <li><span class="tag neg">RETARD</span> <strong>Baptiste DESNOS</strong> cumule -23 min d'écart moyen, le plus important</li>
+    <li><span class="tag pos">HEURES SUP</span> <strong>Victor MOIGNARD</strong> fait en moyenne +20 min de plus que prévu</li>
+    <li><span class="tag neutral">SAMEDI</span> 41 créneaux le samedi, soit ~4% de l'activité</li>
+  </ul>
+</div>
+<div class="charts">
+  <div class="chart-card"><h3>Créneaux réalisés par semaine</h3><div class="chart-container medium"><canvas id="chartWeek"></canvas></div></div>
+  <div class="chart-card"><h3>Répartition des missions</h3><div class="chart-container medium"><canvas id="chartMissions"></canvas></div></div>
+  <div class="chart-card full"><h3>Nombre de créneaux par employé</h3><div class="chart-container tall"><canvas id="chartEmployees"></canvas></div></div>
+  <div class="chart-card full"><h3>Écart horaire moyen par employé (minutes)</h3><div class="chart-container tall"><canvas id="chartEcarts"></canvas></div></div>
+  <div class="chart-card"><h3>Activité par jour de la semaine</h3><div class="chart-container medium"><canvas id="chartDays"></canvas></div></div>
+  <div class="chart-card"><h3>Répartition Matin / Après-midi</h3><div class="chart-container medium"><canvas id="chartCreneau"></canvas></div></div>
+  <div class="chart-card full"><h3>Missions par employé (top 8 missions)</h3><div class="chart-container tall"><canvas id="chartHeatmap"></canvas></div></div>
+  <div class="chart-card"><h3>Absences & indisponibilités par employé</h3><div class="chart-container medium"><canvas id="chartAbsences"></canvas></div></div>
+  <div class="chart-card"><h3>Évolution des missions principales / semaine</h3><div class="chart-container medium"><canvas id="chartEvolution"></canvas></div></div>
+</div>
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#334155';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+const palette = ['#38bdf8','#4ade80','#fb923c','#a78bfa','#f87171','#fbbf24','#2dd4bf','#f472b6','#818cf8','#34d399','#e879f9','#f97316','#67e8f9','#a3e635','#c084fc','#fb7185','#facc15','#22d3ee'];
+const weekLabels = ['S.2','S.3','S.4','S.5','S.6','S.8','S.9','S.10','S.11','S.12'];
+const weekValues = [100, 89, 113, 108, 104, 96, 113, 113, 102, 94];
+const missionLabels = ['Fonction support','UPS','Courses 2','DHL','Ciblex','Cartons','Courses 1','Geodis','Maintenance','Affiches','Ciblex/Cartons','Biodéchets','Déplacement','Soutien','CSE','Autres'];
+const missionValues = [215, 149, 105, 101, 100, 100, 52, 51, 45, 23, 23, 21, 20, 13, 7, 8];
+const empLabels = ['Etienne FÉRET','Victor MOIGNARD','Dimitri LEVASSEUR','Leonie TAILLEZ','Gaël HAMON','Gaëlle RICHET','Alexandre MARTEAU','Adrien MULOT','Baptiste DESNOS','Arthur WORMSER','Florian PETIT','Yann LEWANDOWSKI','Valentine ASSEMAN','Laura MEUNIER','Alexandre ALVES'];
+const empValues = [95, 95, 94, 94, 89, 80, 79, 72, 65, 63, 57, 51, 51, 27, 21];
+const ecartLabels = ['Victor MOIGNARD','Gaël HAMON','Alexandre ALVES','Alexandre MARTEAU','Yann LEWANDOWSKI','Valentine ASSEMAN','Etienne FÉRET','Laura MEUNIER','Gaëlle RICHET','Adrien MULOT','Leonie TAILLEZ','Arthur WORMSER','Florian PETIT','Dimitri LEVASSEUR','Baptiste DESNOS'];
+const ecartValues = [19.8, 8.6, 8.4, 5.5, 5.6, 4.1, -1.3, -2.8, -5.4, -5.9, -10.0, -10.7, -17.5, -20.1, -23.3];
+const dayLabels = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const dayValues = [173, 210, 203, 199, 207, 41];
+new Chart(document.getElementById('chartWeek'), {type:'bar',data:{labels:weekLabels,datasets:[{data:weekValues,backgroundColor:weekValues.map(v=>v>=110?'#4ade80':v<=94?'#f87171':'#38bdf8'),borderRadius:6,barPercentage:0.7}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+' créneaux'}}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}}}}});
+new Chart(document.getElementById('chartMissions'), {type:'doughnut',data:{labels:missionLabels,datasets:[{data:missionValues,backgroundColor:palette,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12,padding:8,font:{size:11}}}}}});
+new Chart(document.getElementById('chartEmployees'), {type:'bar',data:{labels:empLabels,datasets:[{data:empValues,backgroundColor:empValues.map((v,i)=>palette[i%palette.length]),borderRadius:6,barPercentage:0.7}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#1e293b'}}}}});
+new Chart(document.getElementById('chartEcarts'), {type:'bar',data:{labels:ecartLabels,datasets:[{data:ecartValues,backgroundColor:ecartValues.map(v=>v>=0?'#4ade80':'#f87171'),borderRadius:6,barPercentage:0.7}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>(ctx.raw>=0?'+':'')+ctx.raw.toFixed(1)+' min'}}},scales:{x:{grid:{color:'#1e293b'}}}}});
+new Chart(document.getElementById('chartDays'), {type:'radar',data:{labels:dayLabels,datasets:[{data:dayValues,backgroundColor:'rgba(56,189,248,0.2)',borderColor:'#38bdf8',pointBackgroundColor:'#38bdf8',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{beginAtZero:true,grid:{color:'#334155'},angleLines:{color:'#334155'},ticks:{display:false}}}}});
+new Chart(document.getElementById('chartCreneau'), {type:'doughnut',data:{labels:['Matin','Après-midi'],datasets:[{data:[606,427],backgroundColor:['#38bdf8','#a78bfa'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+const topMissions = ['Fonction support','UPS','Courses 2','DHL','Ciblex','Cartons','Courses 1','Geodis'];
+const heatmapData = {
+  'Etienne FÉRET': {'Fonction support':60,UPS:11,'Courses 2':0,DHL:1,Ciblex:5,Cartons:9,'Courses 1':3,Geodis:1},
+  'Victor MOIGNARD': {'Fonction support':66,UPS:1,'Courses 2':0,DHL:0,Ciblex:15,Cartons:0,'Courses 1':6,Geodis:0},
+  'Dimitri LEVASSEUR': {'Fonction support':0,UPS:40,'Courses 2':12,DHL:0,Ciblex:1,Cartons:7,'Courses 1':8,Geodis:9},
+  'Leonie TAILLEZ': {'Fonction support':0,UPS:24,'Courses 2':22,DHL:0,Ciblex:0,Cartons:7,'Courses 1':1,Geodis:15},
+  'Gaël HAMON': {'Fonction support':55,UPS:5,'Courses 2':3,DHL:5,Ciblex:3,Cartons:3,'Courses 1':2,Geodis:7},
+  'Gaëlle RICHET': {'Fonction support':8,UPS:33,'Courses 2':6,DHL:31,Ciblex:1,Cartons:0,'Courses 1':0,Geodis:0},
+  'Alexandre MARTEAU': {'Fonction support':0,UPS:9,'Courses 2':0,DHL:0,Ciblex:22,Cartons:7,'Courses 1':0,Geodis:3},
+  'Adrien MULOT': {'Fonction support':0,UPS:0,'Courses 2':0,DHL:57,Ciblex:0,Cartons:0,'Courses 1':0,Geodis:0},
+  'Baptiste DESNOS': {'Fonction support':9,UPS:9,'Courses 2':21,DHL:0,Ciblex:1,Cartons:0,'Courses 1':9,Geodis:7},
+  'Arthur WORMSER': {'Fonction support':0,UPS:17,'Courses 2':23,DHL:0,Ciblex:1,Cartons:6,'Courses 1':0,Geodis:4},
+  'Florian PETIT': {'Fonction support':8,UPS:0,'Courses 2':18,DHL:7,Ciblex:7,Cartons:1,'Courses 1':2,Geodis:5},
+  'Yann LEWANDOWSKI': {'Fonction support':0,UPS:0,'Courses 2':0,DHL:0,Ciblex:9,Cartons:33,'Courses 1':7,Geodis:0},
+  'Valentine ASSEMAN': {'Fonction support':9,UPS:0,'Courses 2':0,DHL:0,Ciblex:20,Cartons:12,'Courses 1':4,Geodis:0},
+  'Laura MEUNIER': {'Fonction support':0,UPS:0,'Courses 2':0,DHL:0,Ciblex:11,Cartons:6,'Courses 1':10,Geodis:0},
+  'Alexandre ALVES': {'Fonction support':0,UPS:0,'Courses 2':0,DHL:0,Ciblex:4,Cartons:9,'Courses 1':0,Geodis:0}
+};
+const heatEmpLabels = Object.keys(heatmapData);
+const heatDatasets = topMissions.map((m,i)=>({label:m,data:heatEmpLabels.map(e=>heatmapData[e][m]||0),backgroundColor:palette[i],borderRadius:3}));
+new Chart(document.getElementById('chartHeatmap'), {type:'bar',data:{labels:heatEmpLabels.map(n=>n.split(' ')[0]),datasets:heatDatasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:10,font:{size:11}}}},scales:{x:{stacked:true,ticks:{font:{size:11}}},y:{stacked:true,beginAtZero:true,grid:{color:'#1e293b'}}}}});
+const absLabels = ['Gaëlle RICHET','Baptiste DESNOS','Adrien MULOT','Arthur WORMSER','Florian PETIT','Dimitri LEVASSEUR','Alexandre MARTEAU','Gaël HAMON','Laura MEUNIER'];
+const absValues = [19,11,10,4,3,2,2,1,1];
+new Chart(document.getElementById('chartAbsences'), {type:'bar',data:{labels:absLabels.map(n=>n.split(' ')[0]),datasets:[{data:absValues,backgroundColor:'#f87171',borderRadius:6,barPercentage:0.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}}}}});
+const evoWeeks = ['S.2','S.3','S.4','S.5','S.6','S.8','S.9','S.10','S.11','S.12'];
+const evoMissions = {'Fonction support':[21,14,27,30,25,17,30,16,24,11],'UPS':[15,15,15,15,15,17,14,14,15,14],'Ciblex':[9,9,12,10,9,12,10,10,10,9],'DHL':[10,10,10,10,10,10,10,10,10,10]};
+const evoDatasets = Object.entries(evoMissions).map(([m,data],i)=>({label:m,data,borderColor:palette[i],backgroundColor:'transparent',tension:0.3,pointRadius:4,pointBackgroundColor:palette[i],borderWidth:2.5}));
+new Chart(document.getElementById('chartEvolution'), {type:'line',data:{labels:evoWeeks,datasets:evoDatasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},scales:{y:{beginAtZero:true,grid:{color:'#1e293b'}}}}});
+</script>
+</body>
+</html>
