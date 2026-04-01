@@ -64,6 +64,8 @@ canvas{max-height:340px}
 <li>📦 <strong>Cartons</strong> (split Ciblex/Cartons) : <strong>9&nbsp;110€</strong> — 3ème poste de coût</li>
 <li>⏱️ <strong>Courses 2 AM</strong> finit en moyenne <strong>47 min en avance</strong> sur le théorique 18h</li>
 <li>📈 <strong>Maintenance</strong> et <strong>Fonction support AM</strong> dépassent le théorique de <strong>+27 min</strong> en moyenne</li>
+<li>🔴 <strong>B. Desnos</strong> (-24.5 min/shift), <strong>D. Levasseur</strong> (-20.9) et <strong>F. Petit</strong> (-17.3) font systématiquement moins que le théorique</li>
+<li>🟢 <strong>Y. Lewandowski</strong> (+33.5 min/shift), <strong>G. Hamon</strong> (+25.9) et <strong>V. Asseman</strong> (+23.9) dépassent régulièrement le théorique</li>
 </ul>
 </div>
 
@@ -81,6 +83,8 @@ canvas{max-height:340px}
 <div class="card"><h3>🗺️ Heatmap Missions × Employés</h3><canvas id="c10"></canvas></div>
 <div class="card"><h3>📊 Écart vs Horaires Théoriques (fin de shift)</h3><canvas id="c11"></canvas></div>
 <div class="card"><h3>💰 Coût par mission — Top 10</h3><canvas id="c12"></canvas></div>
+<div class="card" style="grid-column:1/-1"><h3>⏱️ Écart moyen durée par employé vs théorique (min/créneau)</h3><canvas id="c13"></canvas></div>
+<div class="card" style="grid-column:1/-1"><h3>📊 Heures théoriques vs réelles par employé</h3><canvas id="c14"></canvas></div>
 
 </div>
 
@@ -136,6 +140,21 @@ new Chart(document.getElementById('c11'),{type:'bar',data:{labels:ecLabels,datas
 const top10m=["Fonction support","UPS","Cartons","Ciblex","Courses 2","DHL","Courses 1","Geodis","Maintenance","Déplacement"];
 const top10c=[11256,9453,9110,8858,7011,5483,4077,3326,2955,1493];
 new Chart(document.getElementById('c12'),{type:'bar',data:{labels:top10m,datasets:[{label:'Coût (€)',data:top10c,backgroundColor:palette.slice(0,10),borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}});
+
+// C13: Écart moyen durée par employé vs théorique
+const empLabels13=["B. DESNOS","D. LEVASSEUR","F. PETIT","A. WORMSER","L. TAILLEZ","A. MULOT","G. RICHET","L. MEUNIER","A. ALVES","E. FÉRET","A. MARTEAU","V. MOIGNARD","V. ASSEMAN","G. HAMON","Y. LEWANDOWSKI"];
+const empEcart13=[-24.5,-20.9,-17.3,-11.7,-10.1,-9.6,-5.4,11.0,11.7,13.5,19.4,22.9,23.9,25.9,33.5];
+const empPctSous=[76,75,65,62,54,62,53,48,31,33,25,15,21,15,18];
+const empColors13=empEcart13.map(v=>v<0?'#ef4444cc':'#10b981cc');
+new Chart(document.getElementById('c13'),{type:'bar',data:{labels:empLabels13,datasets:[{label:'Écart moy (min/créneau)',data:empEcart13,backgroundColor:empColors13,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:function(ctx){return empPctSous[ctx.dataIndex]+'% des shifts sous le théorique'}}}},scales:{y:{title:{display:true,text:'← Fait moins | Fait plus →',color:'#94a3b8'},grid:{color:'#1e293b'}},x:{grid:{color:'#1e293b'}}}}});
+document.getElementById('c13').parentElement.style.height='380px';
+
+// C14: Heures théoriques vs réelles par employé
+const empLabels14=["B. DESNOS","D. LEVASSEUR","F. PETIT","A. WORMSER","L. TAILLEZ","A. MULOT","G. RICHET","L. MEUNIER","A. ALVES","E. FÉRET","A. MARTEAU","V. MOIGNARD","V. ASSEMAN","G. HAMON","Y. LEWANDOWSKI"];
+const empHTheo=[260.2,376.2,217.8,237.5,372.5,260.0,299.2,139.2,114.0,319.0,339.0,339.8,226.0,319.2,233.8];
+const empHReel=[231.7,340.7,201.3,225.2,355.0,247.2,291.3,144.9,119.1,341.7,367.4,379.0,248.7,362.0,265.6];
+new Chart(document.getElementById('c14'),{type:'bar',data:{labels:empLabels14,datasets:[{label:'Heures théoriques',data:empHTheo,backgroundColor:'#94a3b866',borderColor:'#94a3b8',borderWidth:1,borderRadius:4},{label:'Heures réelles',data:empHReel,backgroundColor:empEcart13.map(v=>v<0?'#ef4444aa':'#10b981aa'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:12}},tooltip:{callbacks:{afterLabel:function(ctx){if(ctx.datasetIndex===1){const diff=empHReel[ctx.dataIndex]-empHTheo[ctx.dataIndex];return (diff>=0?'+':'')+diff.toFixed(1)+'h vs théorique'}}}}},scales:{y:{title:{display:true,text:'Heures',color:'#94a3b8'},grid:{color:'#1e293b'}},x:{grid:{color:'#1e293b'}}}}});
+document.getElementById('c14').parentElement.style.height='380px';
 </script>
 </body>
 </html>
