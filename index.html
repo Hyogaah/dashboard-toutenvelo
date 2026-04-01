@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Planning ToutenVélo Rouen — S2 à S12 2026</title>
+<title>Dashboard Planning ToutenVélo Rouen — S2 à S13 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -28,29 +28,42 @@ canvas{max-height:340px}
 </head>
 <body>
 <h1>📊 Dashboard Planning ToutenVélo Rouen</h1>
-<p class="subtitle">Semaines 2 à 12 — Janvier à Mars 2026 | Données corrigées (split Ciblex/Cartons)</p>
+<p class="subtitle">Semaines 2 à 13 — Janvier à Mars 2026 | Données corrigées (split Ciblex/Cartons)</p>
 
 <div class="kpi-section-title">Activité</div>
 <div class="kpi-row">
-<div class="kpi"><div class="val">1056</div><div class="label">Créneaux réalisés</div></div>
-<div class="kpi"><div class="val">3,781h</div><div class="label">Heures totales</div></div>
+<div class="kpi"><div class="val">1,126</div><div class="label">Créneaux réalisés</div></div>
+<div class="kpi"><div class="val">4,121h</div><div class="label">Heures totales</div></div>
 <div class="kpi"><div class="val">15</div><div class="label">Employés</div></div>
 <div class="kpi"><div class="val">17</div><div class="label">Missions distinctes</div></div>
-<div class="kpi"><div class="val">-5.1 min</div><div class="label">Écart horaire moyen</div></div>
+<div class="kpi"><div class="val">-4.6 min</div><div class="label">Écart horaire moyen</div></div>
 </div>
 
 <div class="kpi-section-title">Coûts (16€/h par salarié)</div>
 <div class="kpi-row">
-<div class="kpi"><div class="val">60,491€</div><div class="label">Coût total</div></div>
-<div class="kpi"><div class="val">5,499€</div><div class="label">Coût moyen / semaine</div></div>
-<div class="kpi"><div class="val">4,033€</div><div class="label">Coût moyen / employé</div></div>
-<div class="kpi"><div class="val">10,793€</div><div class="label">Fonction support</div></div>
+<div class="kpi"><div class="val">65,934€</div><div class="label">Coût total</div></div>
+<div class="kpi"><div class="val">5,994€</div><div class="label">Coût moyen / semaine</div></div>
+<div class="kpi"><div class="val">4,396€</div><div class="label">Coût moyen / employé</div></div>
+<div class="kpi"><div class="val">11,256€</div><div class="label">Fonction support</div></div>
+</div>
+
+<div class="kpi-section-title">Absences (hors temps partiel)</div>
+<div class="kpi-row">
+<div class="kpi"><div class="val">31</div><div class="label">Jours d'absence</div></div>
+<div class="kpi"><div class="val">19</div><div class="label">Congés payés</div></div>
+<div class="kpi"><div class="val">9</div><div class="label">Arrêts maladie</div></div>
+<div class="kpi"><div class="val">3</div><div class="label">Absences justifiées</div></div>
 </div>
 
 <div class="insights">
 <h3>Points clés</h3>
 <ul>
-<li>🏢 <strong>Fonction support</strong> est la mission la plus coûteuse : <strong>10&nbsp;793€</strong></li><li>👤 <strong>Victor MOIGNARD</strong> cumule le plus d'heures → <strong>5&nbsp;611€</strong></li><li>📊 Top 3 missions = <strong>46%</strong> du budget (Fonction support, UPS, Cartons)</li><li>📦 <strong>Cartons</strong> (issus du split Ciblex/Cartons) : <strong>8&nbsp;246€</strong> — 3ème poste de coût</li><li>⏱️ Écart horaire moyen : <strong>-5.1 min</strong> (les employés commencent légèrement en avance)</li><li>📅 Samedi = jour avec le plus de variabilité (Ciblex/Cartons, événements)</li>
+<li>🏢 <strong>Fonction support</strong> reste la mission la plus coûteuse : <strong>11&nbsp;256€</strong></li>
+<li>👤 <strong>Victor MOIGNARD</strong> cumule le plus d'heures → <strong>6&nbsp;064€</strong></li>
+<li>📊 Top 3 missions = <strong>45%</strong> du budget (Fonction support, UPS, Cartons)</li>
+<li>📦 <strong>Cartons</strong> (split Ciblex/Cartons) : <strong>9&nbsp;110€</strong> — 3ème poste de coût</li>
+<li>⏱️ <strong>Courses 2 AM</strong> finit en moyenne <strong>47 min en avance</strong> sur le théorique 18h</li>
+<li>📈 <strong>Maintenance</strong> et <strong>Fonction support AM</strong> dépassent le théorique de <strong>+27 min</strong> en moyenne</li>
 </ul>
 </div>
 
@@ -66,13 +79,13 @@ canvas{max-height:340px}
 <div class="card"><h3>📅 Radar jours de la semaine</h3><canvas id="c8"></canvas></div>
 <div class="card"><h3>🌅 Matin vs Après-midi</h3><canvas id="c9"></canvas></div>
 <div class="card"><h3>🗺️ Heatmap Missions × Employés</h3><canvas id="c10"></canvas></div>
-<div class="card"><h3>💰 Coût par mission — Top 10</h3><canvas id="c11"></canvas></div>
-<div class="card"><h3>📈 Évolution Top 5 missions / semaine</h3><canvas id="c12"></canvas></div>
+<div class="card"><h3>📊 Écart vs Horaires Théoriques (fin de shift)</h3><canvas id="c11"></canvas></div>
+<div class="card"><h3>💰 Coût par mission — Top 10</h3><canvas id="c12"></canvas></div>
 
 </div>
 
 <div class="footer">
-ToutenVélo Rouen — Dashboard généré à partir du planning S2-S12 2026<br>
+ToutenVélo Rouen — Dashboard généré à partir du planning S2-S13 2026<br>
 Règle appliquée : Ciblex/Cartons splitté (7h30-9h45 = Ciblex, reste = Cartons) | Coût salarial : 16€/h
 </div>
 
@@ -83,43 +96,46 @@ const amber='#f59e0b',blue='#3b82f6',green='#10b981',red='#ef4444',purple='#8b5c
 const palette=[amber,blue,green,red,purple,pink,teal,orange,'#06b6d4','#84cc16','#a78bfa','#fb923c','#22d3ee','#facc15','#e879f9','#4ade80','#f43e5e'];
 
 // C1: Creneaux/semaine
-new Chart(document.getElementById('c1'),{type:'bar',data:{labels:["1", "S.2", "S.3", "S.4", "S.5", "S.6", "S.8", "S.9", "S.10", "S.11", "S.12"],datasets:[{label:'Créneaux',data:[1, 102, 93, 115, 110, 106, 98, 115, 115, 103, 98],backgroundColor:amber+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c1'),{type:'bar',data:{labels:["S.2","S.3","S.4","S.5","S.6","S.8","S.9","S.10","S.11","S.12","S.13"],datasets:[{label:'Créneaux',data:[101,89,113,108,104,96,113,113,102,94,93],backgroundColor:amber+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
 
 // C2: Cout/semaine
-new Chart(document.getElementById('c2'),{type:'bar',data:{labels:["1", "S.2", "S.3", "S.4", "S.5", "S.6", "S.8", "S.9", "S.10", "S.11", "S.12"],datasets:[{label:'Coût (€)',data:[76, 5564, 5300, 6638, 6219, 6101, 5657, 6497, 6751, 6027, 5661],backgroundColor:blue+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c2'),{type:'bar',data:{labels:["S.2","S.3","S.4","S.5","S.6","S.8","S.9","S.10","S.11","S.12","S.13"],datasets:[{label:'Coût (€)',data:[5640,5300,6638,6219,6101,5657,6497,6751,6027,5661,5443],backgroundColor:blue+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
 
 // C3: Missions donut
-new Chart(document.getElementById('c3'),{type:'doughnut',data:{labels:["Fonction support", "UPS", "Cartons", "Ciblex", "Courses 2", "DHL", "Courses 1", "Geodis", "Maintenance", "D\u00e9placement", "Affiches", "Biod\u00e9chets", "Soutien", "CSE", "Magazines", "M\u00e9nage", "D\u00e9m\u00e9nagement"],datasets:[{data:[674.5, 541.0, 515.4, 508.2, 394.4, 311.5, 232.1, 188.7, 166.2, 79.8, 52.9, 42.5, 35.8, 16.2, 11.5, 8.0, 1.9],backgroundColor:palette.slice(0,17)}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:10}}}}}});
+new Chart(document.getElementById('c3'),{type:'doughnut',data:{labels:["Fonction support","UPS","Cartons","Ciblex","Courses 2","DHL","Courses 1","Geodis","Maintenance","Déplacement","Affiches","Biodéchets","Soutien","CSE","Magazines","Ménage","Déménagement"],datasets:[{data:[703.5,590.8,569.4,553.6,438.2,342.7,254.8,207.9,184.7,93.3,55.2,45.0,38.4,16.2,14.2,10.8,1.9],backgroundColor:palette.slice(0,17)}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:10}}}}}});
 
 // C4: Heures/mission horizontal bar
-new Chart(document.getElementById('c4'),{type:'bar',data:{labels:["Fonction support", "UPS", "Cartons", "Ciblex", "Courses 2", "DHL", "Courses 1", "Geodis", "Maintenance", "D\u00e9placement", "Affiches", "Biod\u00e9chets", "Soutien", "CSE", "Magazines", "M\u00e9nage", "D\u00e9m\u00e9nagement"],datasets:[{label:'Heures',data:[674.5, 541.0, 515.4, 508.2, 394.4, 311.5, 232.1, 188.7, 166.2, 79.8, 52.9, 42.5, 35.8, 16.2, 11.5, 8.0, 1.9],backgroundColor:green+'cc',borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c4'),{type:'bar',data:{labels:["Fonction support","UPS","Cartons","Ciblex","Courses 2","DHL","Courses 1","Geodis","Maintenance","Déplacement","Affiches","Biodéchets","Soutien","CSE","Magazines","Ménage","Déménagement"],datasets:[{label:'Heures',data:[703.5,590.8,569.4,553.6,438.2,342.7,254.8,207.9,184.7,93.3,55.2,45.0,38.4,16.2,14.2,10.8,1.9],backgroundColor:green+'cc',borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}});
 
 // C5: Creneaux/employe
-new Chart(document.getElementById('c5'),{type:'bar',data:{labels:["V. MOIGNARD", "A. MARTEAU", "G. HAMON", "E. F\u00c9RET", "L. TAILLEZ", "D. LEVASSEUR", "G. RICHET", "Y. LEWANDOWSKI", "V. ASSEMAN", "A. WORMSER", "A. MULOT", "B. DESNOS", "F. PETIT", "L. MEUNIER", "A. ALVES"],datasets:[{label:'Créneaux',data:[98, 81, 90, 96, 94, 94, 80, 52, 55, 63, 72, 66, 62, 27, 26],backgroundColor:purple+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c5'),{type:'bar',data:{labels:["L. TAILLEZ","V. MOIGNARD","D. LEVASSEUR","E. FÉRET","G. HAMON","G. RICHET","A. MARTEAU","A. MULOT","B. DESNOS","A. WORMSER","V. ASSEMAN","Y. LEWANDOWSKI","F. PETIT","L. MEUNIER","A. ALVES"],datasets:[{label:'Créneaux',data:[104,103,102,101,99,88,88,80,70,63,57,57,57,31,26],backgroundColor:purple+'cc',borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
 
 // C6: Cout/employe with average line
-const avgCostEmp=4033;
-new Chart(document.getElementById('c6'),{type:'bar',data:{labels:["V. MOIGNARD", "A. MARTEAU", "G. HAMON", "E. F\u00c9RET", "L. TAILLEZ", "D. LEVASSEUR", "G. RICHET", "Y. LEWANDOWSKI", "V. ASSEMAN", "A. WORMSER", "A. MULOT", "B. DESNOS", "F. PETIT", "L. MEUNIER", "A. ALVES"],datasets:[{label:'Coût (€)',data:[5611, 5251, 5241, 5147, 5117, 5031, 4223, 3773, 3626, 3603, 3529, 3482, 3221, 1990, 1647],backgroundColor:amber+'cc',borderRadius:6},{label:'Moyenne',data:Array(15).fill(avgCostEmp),type:'line',borderColor:red,borderDash:[5,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12}}}}});
+const avgCostEmp=4396;
+new Chart(document.getElementById('c6'),{type:'bar',data:{labels:["V. MOIGNARD","A. MARTEAU","G. HAMON","L. TAILLEZ","E. FÉRET","D. LEVASSEUR","G. RICHET","Y. LEWANDOWSKI","V. ASSEMAN","A. MULOT","B. DESNOS","A. WORMSER","F. PETIT","L. MEUNIER","A. ALVES"],datasets:[{label:'Coût (€)',data:[6064,5879,5793,5681,5467,5451,4660,4250,3980,3956,3706,3603,3221,2319,1905],backgroundColor:amber+'cc',borderRadius:6},{label:'Moyenne',data:Array(15).fill(avgCostEmp),type:'line',borderColor:red,borderDash:[5,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12}}}}});
 
-// C7: Ecarts horaires
-new Chart(document.getElementById('c7'),{type:'line',data:{labels:["1", "S.2", "S.3", "S.4", "S.5", "S.6", "S.8", "S.9", "S.10", "S.11", "S.12"],datasets:[{label:'Écart moyen (min)',data:[45.0, -11.7, -1.5, -7.4, -11.5, -3.1, -3.0, -9.7, -3.7, 3.2, -3.3],borderColor:red,backgroundColor:red+'33',fill:true,tension:.3},{label:'Référence (0)',data:Array(11).fill(0),borderColor:'#475569',borderDash:[4,4],pointRadius:0,borderWidth:1}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12}}}}});
+// C7: Ecarts horaires/semaine
+new Chart(document.getElementById('c7'),{type:'line',data:{labels:["S.2","S.3","S.4","S.5","S.6","S.8","S.9","S.10","S.11","S.12","S.13"],datasets:[{label:'Écart moyen (min)',data:[-10.9,-1.5,-7.4,-11.5,-3.1,-3.0,-9.7,-3.7,3.2,-3.3,1.4],borderColor:red,backgroundColor:red+'33',fill:true,tension:.3},{label:'Référence (0)',data:Array(11).fill(0),borderColor:'#475569',borderDash:[4,4],pointRadius:0,borderWidth:1}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12}}}}});
 
 // C8: Radar jours
-new Chart(document.getElementById('c8'),{type:'radar',data:{labels:["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],datasets:[{label:'Créneaux',data:[173, 211, 204, 199, 208, 61],borderColor:amber,backgroundColor:amber+'33',pointBackgroundColor:amber}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c8'),{type:'radar',data:{labels:["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"],datasets:[{label:'Créneaux',data:[188,225,219,218,231,45],borderColor:amber,backgroundColor:amber+'33',pointBackgroundColor:amber}]},options:{responsive:true,plugins:{legend:{display:false}}}});
 
 // C9: Matin/PM
-new Chart(document.getElementById('c9'),{type:'doughnut',data:{labels:["Matin", "Apr\u00e8s-midi"],datasets:[{data:[629, 427],backgroundColor:[amber,blue,green,red]}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}});
+new Chart(document.getElementById('c9'),{type:'doughnut',data:{labels:["Matin","Après-midi"],datasets:[{data:[661,465],backgroundColor:[amber,blue]}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}});
 
-// C10: Heatmap stacked
-new Chart(document.getElementById('c10'),{type:'bar',data:{labels:["V. MOIGNARD", "A. MARTEAU", "G. HAMON", "E. F\u00c9RET", "L. TAILLEZ", "D. LEVASSEUR", "G. RICHET", "Y. LEWANDOWSKI", "V. ASSEMAN", "A. WORMSER", "A. MULOT", "B. DESNOS", "F. PETIT", "L. MEUNIER", "A. ALVES"],datasets:[{"label": "Fonction support", "data": [66, 0, 55, 60, 0, 0, 8, 0, 9, 0, 0, 9, 8, 0, 0], "backgroundColor": "#f59e0b"}, {"label": "UPS", "data": [1, 9, 5, 11, 24, 40, 33, 0, 0, 17, 0, 9, 0, 0, 0], "backgroundColor": "#3b82f6"}, {"label": "Cartons", "data": [3, 9, 4, 10, 7, 7, 0, 34, 16, 6, 0, 1, 6, 6, 14], "backgroundColor": "#10b981"}, {"label": "Ciblex", "data": [18, 24, 4, 6, 0, 1, 1, 10, 24, 1, 0, 2, 12, 11, 9], "backgroundColor": "#ef4444"}, {"label": "Courses 2", "data": [0, 0, 3, 0, 22, 12, 6, 0, 0, 23, 0, 21, 18, 0, 0], "backgroundColor": "#8b5cf6"}, {"label": "DHL", "data": [0, 0, 5, 1, 0, 0, 31, 0, 0, 0, 57, 0, 7, 0, 0], "backgroundColor": "#ec4899"}, {"label": "Courses 1", "data": [6, 0, 2, 3, 1, 8, 0, 7, 4, 0, 0, 9, 2, 10, 0], "backgroundColor": "#14b8a6"}, {"label": "Geodis", "data": [0, 3, 7, 1, 15, 9, 0, 0, 0, 4, 0, 7, 5, 0, 0], "backgroundColor": "#f97316"}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true}},plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:9}}}}}});
+// C10: Heatmap stacked - hours
+new Chart(document.getElementById('c10'),{type:'bar',data:{labels:["V. MOIGNARD","A. MARTEAU","G. HAMON","L. TAILLEZ","E. FÉRET","D. LEVASSEUR","G. RICHET","Y. LEWANDOWSKI","V. ASSEMAN","A. MULOT","B. DESNOS","A. WORMSER","F. PETIT","L. MEUNIER","A. ALVES"],datasets:[{label:"Fct support",data:[222,0,194,0,192,0,19,0,33,0,23,0,20,0,0],backgroundColor:amber},{label:"UPS",data:[5,45,30,98,47,151,127,0,0,0,30,59,0,0,0],backgroundColor:blue},{label:"Cartons",data:[12,35,21,28,37,26,0,175,80,0,4,25,22,38,66],backgroundColor:green},{label:"Ciblex",data:[88,115,21,0,25,9,4,47,107,0,7,4,41,57,29],backgroundColor:red},{label:"Courses 2",data:[0,0,14,91,0,50,32,0,0,0,89,89,64,0,11],backgroundColor:purple},{label:"DHL",data:[0,0,23,0,3,0,108,0,0,190,0,0,19,0,0],backgroundColor:pink},{label:"Courses 1",data:[34,0,7,5,13,36,0,41,24,0,38,0,8,50,0],backgroundColor:teal}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true}},plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:9}}}}}});
 
-// C11: Cost/mission top 10
-const top10m=["Fonction support", "UPS", "Cartons", "Ciblex", "Courses 2", "DHL", "Courses 1", "Geodis", "Maintenance", "D\u00e9placement"];
-const top10c=[10793, 8655, 8246, 8132, 6310, 4984, 3714, 3018, 2660, 1277];
-new Chart(document.getElementById('c11'),{type:'bar',data:{labels:top10m,datasets:[{label:'Coût (€)',data:top10c,backgroundColor:palette.slice(0,10),borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}});
+// C11: NEW - Écart vs théorique par mission (horizontal bar)
+const ecLabels=["Courses 2 (AM)","UPS (AM)","UPS (Mat)","Courses 1 (Mat)","Geodis (Mat)","DHL (AM)","DHL (Mat)","Courses 2 (Mat)","Ciblex (Mat)","Fct support (Mat)","Maintenance (AM)","Fct support (AM)","Cartons (Mat)"];
+const ecData=[-46.9,-33.6,-20.1,-17.2,-4.2,-3.6,11.5,11.7,12.2,18.9,27.4,27.8,28.0];
+const ecColors=ecData.map(v=>v<0?teal:red);
+new Chart(document.getElementById('c11'),{type:'bar',data:{labels:ecLabels,datasets:[{label:'Écart fin moy (min)',data:ecData,backgroundColor:ecColors,borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'← En avance | En retard →',color:'#94a3b8'}}}}});
 
-// C12: Evolution top 5
-new Chart(document.getElementById('c12'),{type:'line',data:{labels:["1", "S.2", "S.3", "S.4", "S.5", "S.6", "S.8", "S.9", "S.10", "S.11", "S.12"],datasets:[{"label": "Fonction support", "data": [0, 21, 14, 27, 30, 25, 17, 30, 16, 24, 11], "borderColor": "#f59e0b", "backgroundColor": "#f59e0b33", "fill": false, "tension": 0.3}, {"label": "UPS", "data": [0, 15, 15, 15, 15, 15, 17, 14, 14, 15, 14], "borderColor": "#3b82f6", "backgroundColor": "#3b82f633", "fill": false, "tension": 0.3}, {"label": "Cartons", "data": [0, 13, 12, 14, 12, 12, 12, 12, 12, 11, 13], "borderColor": "#10b981", "backgroundColor": "#10b98133", "fill": false, "tension": 0.3}, {"label": "Ciblex", "data": [0, 11, 13, 14, 12, 11, 14, 12, 12, 11, 13], "borderColor": "#ef4444", "backgroundColor": "#ef444433", "fill": false, "tension": 0.3}, {"label": "Courses 2", "data": [0, 11, 10, 11, 11, 11, 11, 11, 11, 9, 9], "borderColor": "#8b5cf6", "backgroundColor": "#8b5cf633", "fill": false, "tension": 0.3}]},options:{responsive:true,plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:10}}}}}});
+// C12: Cost/mission top 10
+const top10m=["Fonction support","UPS","Cartons","Ciblex","Courses 2","DHL","Courses 1","Geodis","Maintenance","Déplacement"];
+const top10c=[11256,9453,9110,8858,7011,5483,4077,3326,2955,1493];
+new Chart(document.getElementById('c12'),{type:'bar',data:{labels:top10m,datasets:[{label:'Coût (€)',data:top10c,backgroundColor:palette.slice(0,10),borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}}}});
 </script>
 </body>
 </html>
